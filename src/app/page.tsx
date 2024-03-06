@@ -2,7 +2,10 @@ import { Search } from 'lucide-react';
 
 import { Columns } from '@/components/Columns';
 import { Rows } from '@/components/Rows';
-import { CustomColumn, Row, Table } from '@/types/Table';
+import { getRows } from '@/ports/http/getRows';
+import { getTables } from '@/ports/http/getTables';
+import { Filters } from '@/types/Filter';
+import { CustomColumn, Table } from '@/types/Table';
 
 const mainTable: Table = {
   CustomColumns: [
@@ -12,69 +15,12 @@ const mainTable: Table = {
   ]
 }
 
-const tables: Table[] = [
-  {
-    Name: "process-users-app",
-    CustomColumns: [
-      { Name: "WebSite", Path: "Value.WebSite" },
-      { Name: "City", Path: "Value.Address.City" },
-    ],
-  },
-  {
-    Name: "channels-api",
-    CustomColumns: [
-      { Name: "Reference", Path: "Headers.id_reference" },
-      { Name: "Flow", Path: "Headers.flow" },
-      { Name: "Site", Path: "Value.WebSite" }
-    ],
-    Active: true,
-  },
-  {
-    Name: "channels-api",
-    CustomColumns: [
-      { Name: "WebSite", Path: "Value.WebSite" },
-      { Name: "City", Path: "Value.Address.City" },
-    ],
-  },
-]
-
-const rows: Row[] = [
-  {
-    ID: "fake-id",
-    PageID: "process-users-app",
-    Error: "this is my error",
-    Value: { Name: "test", WebSite: "https://caioreix.com", Address: { City: "fake-city" } },
-    Headers: { id_reference: "my-id", flow: "users" },
-    Target: "PROCESS_USERS_RETRY",
-    Reprocessed: false,
-    CreatedAt: "2024/01/20 14:23:32",
-    ReprocessedAt: "2024/01/20 15:23:32",
-  },
-  {
-    ID: "fake-id",
-    PageID: "process-users-app",
-    Error: "this is my error",
-    Value: { Name: "test", WebSite: "https://caioreix.com", Address: { City: "fake-city" } },
-    Headers: { id_reference: "my-id", flow: "users" },
-    Target: "PROCESS_USERS_RETRY",
-    Reprocessed: false,
-    CreatedAt: "2024/01/20 14:23:32",
-    ReprocessedAt: "2024/01/20 15:23:32",
-  },
-  {
-    ID: "fake-id",
-    PageID: "process-users-app",
-    Error: "this is my error",
-    Value: { Name: "test", WebSite: "https://caioreix.com", Address: { City: "fake-city" } },
-    Headers: { id_reference: "my-id", flow: "users" },
-    Target: "PROCESS_USERS_RETRY",
-    Reprocessed: false,
-    CreatedAt: "2024/01/20 14:23:32",
-    ReprocessedAt: "2024/01/20 15:23:32",
-  }
-];
-
 export default function Home() {
+  const filters: Filters = {}
+
+  const tables = getTables()
+  const rows = getRows(30, filters)
+
   let columns: CustomColumn[] = mainTable.CustomColumns.slice()
   let activatedCount: number = 0
   for (const table of tables) {
