@@ -1,10 +1,12 @@
-import { Filter } from 'lucide-react';
-
+import React from 'react';
 import { CustomColumn } from '@/types/Table';
+import { ModalFilter } from '@/components/ModalFilter';
+import { FilterOptions } from '@/types/Filter';
 
 interface ColumnProps {
     columns: CustomColumn[];
     children?: string;
+    filterOptions: FilterOptions;
 }
 
 export const Columns: React.FC<ColumnProps> = (props: ColumnProps) => {
@@ -19,14 +21,12 @@ export const Columns: React.FC<ColumnProps> = (props: ColumnProps) => {
                 </th>
                 {
                     props.columns.map((column) => (
-                        <th key={column.Path} id={column.Path} scope="col" className="px-1 py-3">
+                        <th key={column.Path + "-column"} id={column.Path + "-column"} scope="col" className="px-1 py-3">
                             <div className='flex items-center space-x-2'>
                                 <span className='flex  items-center'>{column.Name}</span>
                                 <div className='flex'>
                                     <label htmlFor={`filter-${column}`} className="sr-only">Filter {column.Name}</label>
-                                    <button id={`filter-${column.Path}`} className='bg-zinc-600 p-[3px] hover:outline active:outline-zinc-500 outline-1 active:scale-90  transform active:bg-zinc-700 border-zinc-400 w-5 h-5 flex items-center justify-center rounded-md'>
-                                        <Filter className="w-4 h-4 text-zinc-500 dark:text-zinc-400" />
-                                    </button>
+                                    <ModalFilter filterOptions={props.filterOptions} id={column.Path}></ModalFilter>
                                 </div>
                             </div>
                         </th>

@@ -4,7 +4,7 @@ import { Columns } from '@/components/Columns';
 import { Rows } from '@/components/Rows';
 import { getRows } from '@/ports/http/getRows';
 import { getTables } from '@/ports/http/getTables';
-import { Filters } from '@/types/Filter';
+import { FilterOptions } from '@/types/Filter';
 import { CustomColumn, Table } from '@/types/Table';
 
 const mainTable: Table = {
@@ -16,7 +16,7 @@ const mainTable: Table = {
 }
 
 export default function Home() {
-  const filters: Filters = {}
+  const filters: FilterOptions = {Filters: new Map()}
 
   const tables = getTables()
   const rows = getRows(30, filters)
@@ -36,7 +36,7 @@ export default function Home() {
 
   const table = (
     <table className="w-full text-sm text-left text-zinc-500 dark:text-zinc-400">
-      <Columns columns={columns}></Columns>
+      <Columns columns={columns} filterOptions={filters}></Columns>
       <Rows columns={columns} rows={rows}></Rows>
     </table>
   )

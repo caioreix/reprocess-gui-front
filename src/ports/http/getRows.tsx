@@ -1,11 +1,11 @@
-import { Filters } from '@/types/Filter';
+import { FilterOptions } from '@/types/Filter';
 import { Row } from '@/types/Table';
 
-export function getRows(size: number, filters: Filters) {
+export function getRows(size: number, filters: FilterOptions) {
     return generateRows(size)
 }
 
-function generateRows(size: number, filters: Filters = {}): Row[] {
+function generateRows(size: number): Row[] {
     const originalRow: Row = {
         ID: "fake-id",
         PageID: "process-users-app",

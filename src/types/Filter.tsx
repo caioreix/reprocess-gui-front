@@ -1,7 +1,7 @@
-export type Filters = {
+export type FilterOptions = {
     Order?: Order
     OrderTarget?: string
-    Filters?: Map<string, Filter>
+    Filters: Map<string, Filter>
 }
 
 export type Filter = {
