@@ -1,7 +1,7 @@
 'use client'
 
-import { Filter } from 'lucide-react';
-import React, { PropsWithChildren, useState } from 'react';
+import { Filter, X   } from 'lucide-react';
+import React, { useState } from 'react';
 import { FilterOptions, Operator } from '@/types/Filter';
 
 interface ModalFilterProps {
@@ -14,6 +14,7 @@ export const ModalFilter: React.FC<ModalFilterProps> = (props : ModalFilterProps
   const [filterText, setFilterText] = useState('');
   const [selectedOption, setSelectedOption] = useState(Operator.Is); // Estado para armazenar a opção selecionada
   const [isFilterVisible, setFilterVisible] = useState(false);
+  const [active, setActive] = useState(false);
 
   const handleModalFilter = () => {
     setModalOpen(!isModalOpen);
@@ -30,24 +31,38 @@ export const ModalFilter: React.FC<ModalFilterProps> = (props : ModalFilterProps
         Operator:selectedOption,
         Filters:[filterText]
       });
-
+    
     setModalOpen(false);
+    setActive(true)
   };
 
   const handleRemoveFilter = () => {
     props.filterOptions.Filters.delete(String(props.id))
+    setActive(false)
   };
     
     return (
       <div>
         <div className="relative inline-block">
-        <button
-          onClick={handleModalFilter}
-          className="bg-zinc-600 p-[3px] active:outline-zinc-500 outline-1 active:scale-90 transform active:bg-zinc-700 border-zinc-400 w-5 h-5 flex items-center justify-center rounded-md"
-        >
-          <Filter className="w-4 h-4 text-zinc-500 dark:text-zinc-400" />
-        </button>
-        
+          <div className="flex space-x-0.5">
+            <button
+              id="filter"
+              onClick={handleModalFilter}
+              className="bg-zinc-600 p-[3px] active:outline-zinc-500 outline-1 active:scale-90 transform active:bg-zinc-700 border-zinc-400 w-5 h-5 flex items-center justify-center rounded-md"
+            >
+              <Filter className={`${active ? "text-green-500 dark:text-green-400" : "text-zinc-200 dark:text-zinc-400"} w-4 h-4 `} />
+              
+            </button>
+
+            <button
+              id="filterx"
+              onClick={handleRemoveFilter}
+              className={`${active ? "flex" : "hidden"} hover:bg-red-800 group bg-zinc-600 p-[3px] active:outline-zinc-500 outline-1 active:scale-90 transform active:bg-red-950 border-zinc-400 w-5 h-5  items-center justify-center rounded-md`}
+              >
+              <X className="w-4 h-4 text-zinc-300 dark:text-zinc-400 group-hover:text-zinc-200 group-active:text-zinc-200" />
+            </button>
+          </div>
+          
         {isModalOpen && (
           <div className="relative">
             <div className="absolute flex items-center justify-center">
@@ -147,18 +162,20 @@ export const ModalFilter: React.FC<ModalFilterProps> = (props : ModalFilterProps
                 </div>
 
                 <div>
-                  <button
-                    id="filterApplier"
-                    onClick={handleApplyFilter}
-                    className="mt-4 bg-zinc-100 p-2 rounded-md text-zinc-400">
-                    Aplicar Filtro
-                  </button>
-                  <button
-                    id="filterRemover"
-                    onClick={handleRemoveFilter}
-                    className="mt-4 bg-red-500 p-2 rounded-md text-zinc-200">
-                    Limpar
-                  </button>
+                  <div className="flex space-x-2">
+                    <button
+                      id="filterApplier"
+                      onClick={handleApplyFilter}
+                      className="flex-1  mt-4 bg-zinc-100 p-2 rounded-md text-zinc-400">
+                      Aplicar Filtro
+                    </button>
+                    <button
+                      id="filterRemover"
+                      onClick={handleRemoveFilter}
+                      className={`${active ? "flex" : "hidden"} mt-4 bg-red-500 p-2 rounded-md text-zinc-200`}>
+                      Limpar
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
