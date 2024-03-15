@@ -12,8 +12,8 @@ interface ModalFilterProps {
 export const ModalFilter: React.FC<ModalFilterProps> = (props : ModalFilterProps ) => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [filterText, setFilterText] = useState('');
-  const [selectedOption, setSelectedOption] = useState(Operator.Is); // Estado para armazenar a opção selecionada
-  const [isFilterVisible, setFilterVisible] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(Operator.Is);
+  const [_, setFilterVisible] = useState(false);
   const [active, setActive] = useState(false);
 
   const handleModalFilter = () => {
@@ -41,6 +41,22 @@ export const ModalFilter: React.FC<ModalFilterProps> = (props : ModalFilterProps
     setActive(false)
   };
     
+  function RadioButton(operator: Operator, valor: string){
+    return <div className='flex-col justify-center mb-0.5'>
+            <input
+              className='h-3 w-3'
+              type="radio"
+              id={valor}
+              value={operator}
+              checked={selectedOption === operator}
+              onChange={() => setSelectedOption(operator)}
+            />
+            <label htmlFor={valor} className='ms-1 text-sm text-zinc-300'>
+            {valor}
+          </label>
+        </div>
+  }
+
     return (
       <div>
         <div className="relative inline-block">
@@ -66,11 +82,11 @@ export const ModalFilter: React.FC<ModalFilterProps> = (props : ModalFilterProps
         {isModalOpen && (
           <div className="relative">
             <div className="absolute flex items-center justify-center">
-              <div className="bg-white dark:bg-zinc-500 border border-gray-300 dark:border-gray-700 p-4 rounded-md shadow-md auto-size-background">
-                <label htmlFor="filterText">Filtrar por:</label>
+              <div className="bg-white dark:bg-zinc-500 border border-gray-300 dark:border-gray-700 p-3 rounded-md shadow-md auto-size-background">
+                <label className="text-sm text-zinc-300" htmlFor="filterText">Filtrar por:</label>
                 <input
                   type="text"
-                  className="placeholder-opacity-50 w-full border border-gray-300 dark:border-gray-700 p-2 rounded-md dark:text-zinc-400"
+                  className="mt-1 placeholder-opacity-10 w-full border border-gray-300 dark:border-gray-700 p-2 rounded-md dark:text-zinc-400"
                   placeholder="Digite seu filtro aqui:"
                   id="filterText"
                   value={filterText}
@@ -78,86 +94,16 @@ export const ModalFilter: React.FC<ModalFilterProps> = (props : ModalFilterProps
                   style={{ width: 'auto' }}  
                 />
 
-                <div className="mt-4">
-                  <p className='py-2'>Escolha uma opção:</p>
-                  <div className='flex flex-col space-y-1'>
-                  <div>
-                    <label>
-                      <input
-                        type="radio"
-                        value={Operator.Is}
-                        checked={selectedOption === Operator.Is}
-                        onChange={() => setSelectedOption(Operator.Is)}
-                      />
-                      É um
-                    </label>
-                    </div>
-                    <div>
-                      <label>
-                        <input
-                          type="radio"
-                          value={Operator.IsNot}
-                          checked={selectedOption === Operator.IsNot}
-                          onChange={() => setSelectedOption(Operator.IsNot)}
-                        />
-                        Não é um
-                      </label>
-                    </div>
-                    <div>
-                      <label>
-                        <input
-                          type="radio"
-                          value={Operator.Exists}
-                          checked={selectedOption === Operator.Exists}
-                          onChange={() => setSelectedOption(Operator.Exists)}
-                        />
-                        Existe
-                      </label>
-                    </div>
-                    <div>
-                      <label>
-                        <input
-                          type="radio"
-                          value={Operator.DoesNotExists}
-                          checked={selectedOption === Operator.DoesNotExists}
-                          onChange={() => setSelectedOption(Operator.DoesNotExists)}
-                        />
-                        Não existe
-                      </label>
-                    </div>
-                    <div>
-                      <label>
-                        <input
-                          type="radio"
-                          value={Operator.StartWith}
-                          checked={selectedOption === Operator.StartWith}
-                          onChange={() => setSelectedOption(Operator.StartWith)}
-                        />
-                        Começa com
-                      </label>
-                    </div>
-                    <div>
-                      <label>
-                        <input
-                          type="radio"
-                          value={Operator.IsOneOf}
-                          checked={selectedOption === Operator.IsOneOf}
-                          onChange={() => setSelectedOption(Operator.IsOneOf)}
-                        />
-                        É um de
-                      </label>
-                    </div>
-                    <div>
-                      <label>
-                        <input
-                          type="radio"
-                          value={Operator.IsNotOneOf}
-                          checked={selectedOption === Operator.IsNotOneOf}
-                          onChange={() => setSelectedOption(Operator.IsNotOneOf)}
-                        />
-                        Não é um de
-                      </label>
-                    </div>
+                <div className="mt-0.5">
+                  <p className='py-2 text-sm text-zinc-300'>Escolha uma opção:</p>
+                  <div className='flex-col justify-center'>
+                    {RadioButton(Operator.Is, "É um")}
+                    {RadioButton(Operator.IsNot, "Não é um")}
+                    {RadioButton(Operator.Exists, "Existe")}
+                    {RadioButton(Operator.DoesNotExists, "Não existe")}
+                    {RadioButton(Operator.StartWith, "Começa com")}
+                    {RadioButton(Operator.IsOneOf, "É um de")}
+                    {RadioButton(Operator.IsNotOneOf, "Não é um de")}
                   </div>
                 </div>
 
@@ -166,7 +112,7 @@ export const ModalFilter: React.FC<ModalFilterProps> = (props : ModalFilterProps
                     <button
                       id="filterApplier"
                       onClick={handleApplyFilter}
-                      className="flex-1  mt-4 bg-zinc-100 p-2 rounded-md text-zinc-400">
+                      className="flex-1  mt-3 bg-zinc-100 p-2 rounded-md text-zinc-500">
                       Aplicar Filtro
                     </button>
                     <button
