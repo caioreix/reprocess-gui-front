@@ -1,7 +1,7 @@
 'use client'
 
 import { Filter, X   } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FilterOptions, Operator } from '@/types/Filter';
 
 interface ModalFilterProps {
@@ -10,15 +10,32 @@ interface ModalFilterProps {
 }
 
 export const ModalFilter: React.FC<ModalFilterProps> = (props : ModalFilterProps ) => {
-  const [isModalOpen, setModalOpen] = useState(false);
   const [filterText, setFilterText] = useState('');
   const [selectedOption, setSelectedOption] = useState(Operator.Is);
   const [_, setFilterVisible] = useState(false);
   const [active, setActive] = useState(false);
+  const [clickedOutside, setClickedOutside] = useState(false);
 
   const handleModalFilter = () => {
-    setModalOpen(!isModalOpen);
+    setClickedOutside(true);
   };
+
+  const opaRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (opaRef.current && !opaRef.current.contains(event.target as Node)) {
+        setClickedOutside(false);
+      } else {
+        setClickedOutside(true);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleApplyFilter = () => {
     if(filterText != ''){
@@ -32,7 +49,7 @@ export const ModalFilter: React.FC<ModalFilterProps> = (props : ModalFilterProps
         Filters:[filterText]
       });
     
-    setModalOpen(false);
+    setClickedOutside(false);
     setActive(true)
   };
 
@@ -79,8 +96,7 @@ export const ModalFilter: React.FC<ModalFilterProps> = (props : ModalFilterProps
             </button>
           </div>
           
-        {isModalOpen && (
-          <div className="relative">
+          <div className={`${clickedOutside ? "relative" : "hidden"}`} ref={opaRef}>
             <div className="absolute flex items-center justify-center">
               <div className="bg-white dark:bg-zinc-500 border border-gray-300 dark:border-gray-700 p-3 rounded-md shadow-md auto-size-background">
                 <label className="text-sm text-zinc-300" htmlFor="filterText">Filtrar por:</label>
@@ -126,7 +142,6 @@ export const ModalFilter: React.FC<ModalFilterProps> = (props : ModalFilterProps
               </div>
             </div>
           </div>
-        )}
       </div>
     </div>
   );
